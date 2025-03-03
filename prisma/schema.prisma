@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model SolarData {
+  id            Int      @id @default(autoincrement())
+  deviceUuid    String
+  generatedTime BigInt
+  roundTime     BigInt
+  formatedTime  String
+  cumulative    Float
+  difference    Float
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([deviceUuid])
+  @@index([roundTime])
+}
+
+model RequestLog {
+  id        Int      @id @default(autoincrement())
+  timestamp BigInt
+  url       String
+  method    String
+  headers   String // JSON string of headers
+  body      String // JSON string of request body
+  response  String? // JSON string of response
+  status    Int?
+  error     String?
+  createdAt DateTime @default(now())
+
+  @@index([timestamp])
+}
+
+model Setting {
+  id          Int     @id @default(autoincrement())
+  key         String  @unique
+  value       String
+  description String?
+}
